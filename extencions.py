@@ -1,5 +1,6 @@
 import flet as ft
-from logic import ordenar 
+from logic.ordenar import Ordenamiento 
+
 def main(page: ft.Page):
     darkmode = True
     page.theme_mode = ft.ThemeMode.DARK if darkmode else ft.ThemeMode.LIGHT
@@ -81,18 +82,23 @@ def main(page: ft.Page):
     
     #parte de ordenamiento:
     
-    def ordenar():
+    def ordenarArchivos(e):
+        
+        ordenar = Ordenamiento(lista_extensiones, r"E:\testOrdenamiento")
+        ordenar.ordenar()
         pass
     
     button_send = ft.Row(
         [
-            ft.ElevatedButton("Ordenar", ft.icons.RUN_CIRCLE, icon_color="green400", on_click=ordenar, style=ft.ButtonStyle(overlay_color="#1976D2", color={ft.MaterialState.HOVERED: "#FFFFFF"})),
-        ]
+            ft.ElevatedButton("Ordenar", ft.icons.PLAY_ARROW, icon_color="green400", adaptive=True, on_click=ordenarArchivos, style=ft.ButtonStyle(overlay_color="#1976D2", color={ft.MaterialState.HOVERED: "#FFFFFF"}, padding=20 )),
+        ],
+         alignment= ft.MainAxisAlignment.CENTER
         )
 
     page.add(ft.Row([theme_button], alignment=ft.MainAxisAlignment.END))
     page.add(button_row)
     page.add(lista_column)
+    page.add(button_send)
 
     actualizar_lista_column()
 
