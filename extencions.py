@@ -3,6 +3,7 @@ from logic.ordenar import Ordenamiento
 
 def main(page: ft.Page):
      # acomodar la UI en la interfaz
+    page.window_maximized = True
     page.scroll = ft.ScrollMode.AUTO
     page.padding = 0
     page.bgcolor = "#2A363B"
