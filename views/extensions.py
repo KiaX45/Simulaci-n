@@ -2,8 +2,8 @@ import flet as ft
 from logic.ordenar import Ordenamiento
 
 class OrdenarElementos(ft.UserControl):
-    def __init__(self, page, darkmode: bool = True):
-        super().__init__()
+    def _init_(self, page, darkmode: bool = True):
+        super()._init_()
 
         self.page = page
         self.darkmode = darkmode
@@ -101,11 +101,11 @@ class OrdenarElementos(ft.UserControl):
         self.build_ui()
 
     def build_ui(self):
-        self.add(self.cTitle)
-        self.add(ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END))
-        self.add(self.button_row)
-        self.add(self.lista_column)
-        self.add(self.button_send)
+        self.page.add(self.cTitle)
+        self.page.add(ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END))
+        self.page.add(self.button_row)
+        self.page.add(self.lista_column)
+        self.page.add(self.button_send)
 
         self.actualizar_lista_column()
 
@@ -202,5 +202,5 @@ def main(page: ft.Page):
     ordenar_elementos_app = OrdenarElementos(page)
     page.add(ordenar_elementos_app)
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     ft.app(target=main)

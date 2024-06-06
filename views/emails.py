@@ -17,8 +17,9 @@ class Email(ft.UserControl):
         self.subject = ft.TextField(label="Asunto", hint_text="Ingrese el asunto")
 
         self.submit_button = ft.ElevatedButton("Enviar", icon=ft.icons.SEND_ROUNDED, on_click=self.send_email)
-        self.destinatarios = [["Correo 1", False, "Trabajo"], ["Correo 2", True, "Personal"], ["Correo 3", False, "Familia"],
-                              ["Correo 4", True, "Amigos"], ["Correo 5", False, "Trabajo"], ["Correo 6", True, "Personal"]]
+        self.destinatarios = [["Correo 1", False, "Trabajo", "Luis"], ["Correo 2", True, "Personal", "Camilo"],
+                              ["Correo 3", False, "Familia", "Andres"], ["Correo 4", True, "Amigos", "Jon"],
+                              ["Correo 5", False, "Trabajo", "Sara"], ["Correo 6", True, "Personal", "Luisa"]]
         
         # Creamos un atributo fila para contener todos los inputs necesarios 
         self.form = ft.Column(
@@ -45,8 +46,8 @@ class Email(ft.UserControl):
         
     def add_destinatarios(self):
         self.destinatarios_column.controls.clear()
-        for nombre, estado, tipo in self.destinatarios:
-            fila = self.crear_fila(nombre, estado, tipo)
+        for correo, estado, tipo, nombre in self.destinatarios:
+            fila = self.crear_fila(correo, nombre, estado, tipo)
             self.destinatarios_column.controls.append(fila)
         self.page.update()  # Asegurarse de que la página se actualice
         
@@ -61,12 +62,13 @@ class Email(ft.UserControl):
         
         self.page.update()
         
-    def crear_fila(self, nombre, estado, tipo):
-        fila = [nombre, estado, tipo]
+    def crear_fila(self, correo,nombre, estado,  tipo):
+        fila = [correo, nombre, estado, tipo]
         return ft.Row(
             [
-                ft.TextField(value=nombre, text_align=ft.TextAlign.CENTER, width=200, border_color="green400"),
+                ft.TextField(value=correo, text_align=ft.TextAlign.CENTER, width=200, border_color="green400"),
                 ft.TextField(value=tipo, text_align=ft.TextAlign.CENTER, width=100, border_color="green400"),
+                ft.TextField(value=nombre, text_align=ft.TextAlign.CENTER, width=100, border_color="green400"),
                 ft.Checkbox(value=estado, width=100, data=fila, active_color="green400", on_change=self.actualizar_estado),
                 
             ],
