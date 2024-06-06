@@ -41,7 +41,7 @@ def main(page: ft.Page):
     ## Creación de instancias de las clases Home y Email
     email = Email(page)
     home = Home()
-    extencions = OrdenarElementos(page)
+    extensions = OrdenarElementos(page)
     
     def change_page(event):
         match event.control.selected_index:
@@ -98,7 +98,7 @@ def main(page: ft.Page):
             [
                 rail,
                 ft.VerticalDivider(width=1),
-                ft.Column([extencions.build()], alignment=ft.MainAxisAlignment.START, expand=True),
+                ft.Column([extensions.build()], alignment=ft.MainAxisAlignment.START, expand=True),
             ],
             expand=True
         )
