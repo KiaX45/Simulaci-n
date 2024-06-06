@@ -101,11 +101,11 @@ class OrdenarElementos(ft.UserControl):
         self.build_ui()
 
     def build_ui(self):
-        self.add(self.cTitle)
-        self.add(ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END))
-        self.add(self.button_row)
-        self.add(self.lista_column)
-        self.add(self.button_send)
+        self.page.add(self.cTitle)
+        self.page.add(ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END))
+        self.page.add(self.button_row)
+        self.page.add(self.lista_column)
+        self.page.add(self.button_send)
 
         self.actualizar_lista_column()
 
