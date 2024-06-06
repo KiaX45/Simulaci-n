@@ -4,6 +4,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from views.Home import Home
 from views.emails import Email
+from views.extensions import OrdenarElementos
 
 
 def main(page: ft.Page):
@@ -40,12 +41,17 @@ def main(page: ft.Page):
     ## Creación de instancias de las clases Home y Email
     email = Email(page)
     home = Home()
+    extencions = OrdenarElementos(page)
     
     def change_page(event):
-        if event.control.selected_index == 0:
-            page.go("/")
-        else:
-            page.go("/tienda")
+        match event.control.selected_index:
+            case 0:
+                page.go("/")
+            case 1:
+                page.go("/tienda")
+            case 2:
+                page.go("/extensiones")
+
     
     #creamos el rail de navegación
     rail = ft.NavigationRail(
@@ -62,8 +68,8 @@ def main(page: ft.Page):
                 label="Email",
             ),
             ft.NavigationRailDestination(
-                icon=ft.icons.SHOP,
-                label="Tienda",
+                icon=ft.icons.DOCUMENT_SCANNER,
+                label="Extensiones",
             )
         ],
         on_change=change_page
@@ -84,6 +90,15 @@ def main(page: ft.Page):
                 rail,
                 ft.VerticalDivider(width=1),
                 ft.Column([email.build()], alignment=ft.MainAxisAlignment.START, expand=True),
+            ],
+            expand=True
+        )
+    
+    filaPrincipalExtensiones = ft.Row(
+            [
+                rail,
+                ft.VerticalDivider(width=1),
+                ft.Column([extencions.build()], alignment=ft.MainAxisAlignment.START, expand=True),
             ],
             expand=True
         )
@@ -111,6 +126,18 @@ def main(page: ft.Page):
                     controls=[
                         appbar,
                         filaPrincipalEmail,
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.START,
+                    vertical_alignment=ft.MainAxisAlignment.START,
+                )
+            )
+        elif page.route == "/extensiones":
+            page.views.append(
+                ft.View(
+                    route="/extensiones",
+                    controls=[
+                        appbar,
+                        filaPrincipalExtensiones,
                     ],
                     horizontal_alignment=ft.CrossAxisAlignment.START,
                     vertical_alignment=ft.MainAxisAlignment.START,
