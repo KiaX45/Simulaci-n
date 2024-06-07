@@ -8,6 +8,7 @@ class OrdenarElementos(ft.UserControl):
         self.page = page
         self.darkmode = darkmode
         self.lista_extensiones = [["Documentos", ".docx"], ["Presentaciones", ".pptx"], ["PDF", ".pdf"], ["Imagenes", ".png"]]
+        self.carpeta_destino = ""  # Variable para almacenar la ruta de la carpeta seleccionada
 
         self.page.window_maximized = True
         self.page.scroll = ft.ScrollMode.AUTO
@@ -66,8 +67,19 @@ class OrdenarElementos(ft.UserControl):
 
         self.lista_column = ft.Column()
 
+        self.file_picker = ft.FilePicker(on_result=self.on_file_picker_result)
+        self.page.overlay.append(self.file_picker)
+
+        self.button_select_folder = ft.ElevatedButton(
+            "Seleccionar Carpeta",
+            icon=ft.icons.FOLDER_OPEN,
+            on_click=self.select_folder,
+            style=ft.ButtonStyle(overlay_color="#99B898", bgcolor="none", shape=ft.RoundedRectangleBorder(radius=12), side=ft.BorderSide(color="blue400", width=2), shadow_color="grey600", elevation=5)
+        )
+
         self.button_send = ft.Row(
             [
+                self.button_select_folder,
                 ft.ElevatedButton(
                     content=ft.Row(
                         [
@@ -181,8 +193,21 @@ class OrdenarElementos(ft.UserControl):
             height=100,
         )
 
+    def select_folder(self, e):
+        self.file_picker.get_directory_path()
+
+    def on_file_picker_result(self, e: ft.FilePickerResultEvent):
+        if e.path:
+            self.carpeta_destino = e.path
+            print(f"Carpeta seleccionada: {self.carpeta_destino}")
+            
+
     def ordenarArchivos(self, e):
-        ordenar = Ordenamiento(self.lista_extensiones, r"E:\testOrdenamiento")
+        if not self.carpeta_destino:
+            print("Por favor selecciona una carpeta primero.")
+            return
+
+        ordenar = Ordenamiento(self.lista_extensiones, self.carpeta_destino)
         ordenar.ordenar()
 
     def build(self) -> ft.Column:
