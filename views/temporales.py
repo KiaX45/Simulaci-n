@@ -51,12 +51,17 @@ class EliminarArchivosTemporales(ft.UserControl):
             style=ft.ButtonStyle(overlay_color="#99B898", bgcolor="none", shape=ft.RoundedRectangleBorder(radius=12), side=ft.BorderSide(color="red400", width=2), shadow_color="grey600", elevation=5)
         )
 
+        self.result_container = ft.Column()
+
         self.build_ui()
 
     def build_ui(self):
-        self.page.add(self.cTitle)
-        self.page.add(ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END))
-        self.page.add(ft.Row([self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER))
+        self.page.controls.clear()
+        self.page.controls.append(self.cTitle)
+        self.page.controls.append(ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END))
+        self.page.controls.append(ft.Row([self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER))
+        self.page.controls.append(self.result_container)
+        self.page.update()
 
     def changeTheme(self, e):
         self.darkmode = not self.darkmode
@@ -74,16 +79,24 @@ class EliminarArchivosTemporales(ft.UserControl):
 
     def eliminar_archivos_temporales(self, e):
         temp_dirs = [tempfile.gettempdir(), os.path.join(os.environ['SystemRoot'], 'Temp')]
+        archivos_eliminados = []
+
         for temp_dir in temp_dirs:
-            self.eliminar_archivos_en_directorio(temp_dir)
-        print("Archivos temporales eliminados.")
+            archivos_eliminados += self.eliminar_archivos_en_directorio(temp_dir)
+
+        if archivos_eliminados:
+            self.mostrar_resultados(archivos_eliminados)
+        else:
+            self.mostrar_resultados(["No se eliminaron archivos temporales."])
 
     def eliminar_archivos_en_directorio(self, directorio):
+        archivos_eliminados = []
         for root, dirs, files in os.walk(directorio):
             for file in files:
                 file_path = os.path.join(root, file)
                 try:
                     os.remove(file_path)
+                    archivos_eliminados.append(file_path)
                     print(f"Archivo eliminado: {file_path}")
                 except Exception as ex:
                     print(f"No se pudo eliminar el archivo {file_path}. Error: {ex}")
@@ -91,14 +104,36 @@ class EliminarArchivosTemporales(ft.UserControl):
                 dir_path = os.path.join(root, dir)
                 try:
                     shutil.rmtree(dir_path)
+                    archivos_eliminados.append(dir_path)
                     print(f"Directorio eliminado: {dir_path}")
                 except Exception as ex:
                     print(f"No se pudo eliminar el directorio {dir_path}. Error: {ex}")
+        return archivos_eliminados
+
+    def mostrar_resultados(self, archivos_eliminados):
+        self.result_container.controls.clear()
+        self.result_container.controls.append(ft.Text("Archivos eliminados con éxito:"))
+
+        for archivo in archivos_eliminados:
+            self.result_container.controls.append(ft.Text(archivo))
+
+        self.page.update()
+
+    def build(self):
+        return ft.Column(
+            controls=[
+                self.cTitle,
+                ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END),
+                ft.Row([self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER),
+                self.result_container
+            ],
+            alignment=ft.MainAxisAlignment.CENTER
+        )
 
 def main(page: ft.Page):
     page.title = "Eliminar Archivos Temporales"
     eliminar_archivos_temp_app = EliminarArchivosTemporales(page)
-    page.add(eliminar_archivos_temp_app)
+    page.add(eliminar_archivos_temp_app.build())
 
 if __name__ == "__main__":
     ft.app(target=main)
