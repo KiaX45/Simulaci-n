@@ -1,88 +1,42 @@
 import flet as ft
 
-def main(page: ft.Page):
-    darkmode = True
-    page.theme_mode = ft.ThemeMode.DARK if darkmode else ft.ThemeMode.LIGHT
+class MyApp(ft.UserControl):
+    def __init__(self):
+        super().__init__()
+        self.destinatarios_column = ft.Column()
 
-    lista_extensiones = [["Documentos", ".docx"], ["Presentaciones", ".pptx"], ["PDF", ".pdf"], ["Imagenes", "img"]]
-    
-    def actualizar_lista_column():
-        lista_column.controls.clear()
-        for nombre, extension in lista_extensiones:
-            fila = crear_fila(nombre, extension)
-            lista_column.controls.append(fila)
-        page.update()
+        # Inicialmente agregar algunos controles al column
+        self.add_controls()
 
-    def añadir(e):
-        nombre = nombre_input.value.strip()
-        extension = extension_input.value.strip()
-        
-        if not nombre or not extension:
-            return  # No añadir si los campos están vacíos
-        
-        for fila_nombre, fila_extension in lista_extensiones:
-            if nombre == fila_nombre or extension == fila_extension:
-                print(f"El nombre '{nombre}' o la extensión '{extension}' ya existen.")
-                return
-        
-        lista_extensiones.append([nombre, extension])
-        actualizar_lista_column()
-        nombre_input.value = ""
-        extension_input.value = ""
-    
-    def eliminar(e):
-        fila = e.control.data
-        lista_extensiones.remove(fila)
-        actualizar_lista_column()
-    
-    def changeTheme(e):
-        nonlocal darkmode
-        darkmode = not darkmode
-        page.theme_mode = ft.ThemeMode.DARK if darkmode else ft.ThemeMode.LIGHT
-        updateThemeButton()
-        page.update()
-    
-    def updateThemeButton():
-        iconButton = ft.icons.DARK_MODE if not darkmode else ft.icons.LIGHT_MODE
-        theme_button.icon = iconButton
-        theme_button.text = "Light" if not darkmode else "Dark"
-    
-    def crear_fila(nombre, extension):
-        fila = [nombre, extension]
-        return ft.Row(
-            [
-                ft.TextField(value=nombre, text_align=ft.TextAlign.CENTER, width=200, border_color="green400"),
-                ft.TextField(value=extension, text_align=ft.TextAlign.CENTER, width=100, border_color="green400"),
-                ft.ElevatedButton("Eliminar", ft.icons.DELETE, icon_color="red400", data=fila, on_click=eliminar, style=ft.ButtonStyle(overlay_color="#D32F2F", color={ft.MaterialState.HOVERED: "#FFFFFF"})),
-                ft.ElevatedButton("Editar", ft.icons.EDIT, icon_color="yellow400", on_click=None, style=ft.ButtonStyle(overlay_color="#1976D2", color={ft.MaterialState.HOVERED: "#FFFFFF"})),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            height=100,
+    def add_controls(self):
+        self.destinatarios_column.controls.extend([
+            ft.TextField(label="Correo 1"),
+            ft.TextField(label="Correo 2"),
+            ft.TextField(label="Correo 3")
+        ])
+        if self.page:
+            self.destinatarios_column.update()
+
+    def clear_column(self, e):
+        self.destinatarios_column.controls.clear()
+        self.destinatarios_column.update()
+
+    def recreate_controls(self, e):
+        self.add_controls()
+
+    def build(self):
+        return ft.Column(
+            controls=[
+                ft.ElevatedButton(text="Clear", on_click=self.clear_column),
+                ft.ElevatedButton(text="Recreate", on_click=self.recreate_controls),
+                self.destinatarios_column
+            ]
         )
 
-    iconButton = ft.icons.DARK_MODE if not darkmode else ft.icons.LIGHT_MODE
-    theme_button = ft.ElevatedButton("Dark", iconButton, on_click=changeTheme)
+def main(page: ft.Page):
+    page.title = "Clear and Recreate Column Example"
+    app = MyApp()
+    page.add(app)
 
-    nombre_input = ft.TextField(value="", hint_text="Nombre_Carpeta", text_align=ft.TextAlign.CENTER, width=200, border_color="green400")
-    extension_input = ft.TextField(value="", hint_text="Extención", text_align=ft.TextAlign.CENTER, width=100, border_color="green400")
-    
-    button_row = ft.Row(
-        [
-            nombre_input,
-            extension_input,
-            ft.ElevatedButton("Añadir", ft.icons.ADD, icon_color="green400", on_click=añadir, style=ft.ButtonStyle(overlay_color="#1976D2", color={ft.MaterialState.HOVERED: "#FFFFFF"})),
-        ],
-        alignment=ft.MainAxisAlignment.CENTER,
-        height=100,
-    )
-
-    lista_column = ft.Column()
-
-    page.add(ft.Row([theme_button], alignment=ft.MainAxisAlignment.END))
-    page.add(button_row)
-    page.add(lista_column)
-
-    actualizar_lista_column()
-
-ft.app(main)
-#test Commit Jesus
+if __name__ == "__main__":
+    ft.app(target=main)

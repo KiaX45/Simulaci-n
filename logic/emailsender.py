@@ -2,7 +2,7 @@ from email.message import EmailMessage
 import smtplib
 
 class send_email:
-    def __init__(self, sender: str, recipients: list, password: str, message:str, subject ) ->None:
+    def __init__(self, sender: str, recipients: str, password: str, message:str, subject ) ->None:
         self.sender = sender
         self.recipients = recipients
         self.password = password

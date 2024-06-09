@@ -5,6 +5,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from views.Home import Home
 from views.emails import Email
 from views.extensions import OrdenarElementos
+from views.create_emails import Email_creation
+from views.csv_front import Csv_convertion
+from views.temporales import EliminarArchivosTemporales
 
 
 def main(page: ft.Page):
@@ -42,6 +45,10 @@ def main(page: ft.Page):
     email = Email(page)
     home = Home()
     extensions = OrdenarElementos(page)
+    email_creation = Email_creation(page)
+    csv_convertion = Csv_convertion(page)
+    eliminarArchivosTemporales = EliminarArchivosTemporales(page)
+    
     
     def change_page(event):
         match event.control.selected_index:
@@ -51,6 +58,12 @@ def main(page: ft.Page):
                 page.go("/tienda")
             case 2:
                 page.go("/extensiones")
+            case 3:
+                page.go("/email_creation")
+            case 4: 
+                page.go("/csv_convertion")
+            case 5:
+                page.go("/eliminar_archivos_temporales")
 
     
     #creamos el rail de navegación
@@ -68,9 +81,21 @@ def main(page: ft.Page):
                 label="Email",
             ),
             ft.NavigationRailDestination(
-                icon=ft.icons.DOCUMENT_SCANNER,
+                icon=ft.icons.FOLDER,
                 label="Extensiones",
-            )
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.icons.MARK_EMAIL_READ_SHARP,
+                label="Crear Email",
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.icons.TABLE_CHART,
+                label="Convertir CSV",
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.icons.DELETE,
+                label="Eliminar Archivos Temporales",
+            ),
         ],
         on_change=change_page
     )
@@ -99,6 +124,33 @@ def main(page: ft.Page):
                 rail,
                 ft.VerticalDivider(width=1),
                 ft.Column([extensions.build()], alignment=ft.MainAxisAlignment.START, expand=True),
+            ],
+            expand=True
+        )
+    
+    filaPrincipalEmailCreation = ft.Row(
+            [
+                rail,
+                ft.VerticalDivider(width=1),
+                ft.Column([email_creation.build()], alignment=ft.MainAxisAlignment.START, expand=True),
+            ],
+            expand=True
+        )
+    
+    filaPrincipalCsv = ft.Row(
+            [
+                rail,
+                ft.VerticalDivider(width=1),
+                ft.Column([csv_convertion.build()], alignment=ft.MainAxisAlignment.START, expand=True),
+            ],
+            expand=True
+        )
+    
+    filaPrincipalEliminarArchivosTemporales = ft.Row(
+            [
+                rail,
+                ft.VerticalDivider(width=1),
+                ft.Column([eliminarArchivosTemporales.build()], alignment=ft.MainAxisAlignment.START, expand=True),
             ],
             expand=True
         )
@@ -138,6 +190,42 @@ def main(page: ft.Page):
                     controls=[
                         appbar,
                         filaPrincipalExtensiones,
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.START,
+                    vertical_alignment=ft.MainAxisAlignment.START,
+                )
+            )
+        elif page.route == "/email_creation":
+            page.views.append(
+                ft.View(
+                    route="/email_creation",
+                    controls=[
+                        appbar,
+                        filaPrincipalEmailCreation,
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.START,
+                    vertical_alignment=ft.MainAxisAlignment.START,
+                )
+            )
+        elif page.route == "/csv_convertion":
+            page.views.append(
+                ft.View(
+                    route="/csv_convertion",
+                    controls=[
+                        appbar,
+                        filaPrincipalCsv,
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.START,
+                    vertical_alignment=ft.MainAxisAlignment.START,
+                )
+            )
+        elif page.route == "/eliminar_archivos_temporales":
+            page.views.append(
+                ft.View(
+                    route="/eliminar_archivos_temporales",
+                    controls=[
+                        appbar,
+                        filaPrincipalEliminarArchivosTemporales,
                     ],
                     horizontal_alignment=ft.CrossAxisAlignment.START,
                     vertical_alignment=ft.MainAxisAlignment.START,
