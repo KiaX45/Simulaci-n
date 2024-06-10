@@ -1,4 +1,7 @@
 import flet as ft
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from logic.ordenar import Ordenamiento
 
 class OrdenarElementos(ft.UserControl):
@@ -65,7 +68,11 @@ class OrdenarElementos(ft.UserControl):
             height=100,
         )
 
-        self.lista_column = ft.Column()
+        self.lista_column = ft.Column(
+            controls=[],
+            alignment=ft.MainAxisAlignment.START,
+            scroll=ft.ScrollMode.ALWAYS  # Asegurarse de que el scroll esté habilitado
+        )
 
         self.file_picker = ft.FilePicker(on_result=self.on_file_picker_result)
         self.page.overlay.append(self.file_picker)
@@ -136,8 +143,8 @@ class OrdenarElementos(ft.UserControl):
             return  # No añadir si los campos están vacíos
         
         for fila_nombre, fila_extension in self.lista_extensiones:
-            if nombre == fila_nombre or extension == fila_extension:
-                print(f"El nombre '{nombre}' o la extensión '{extension}' ya existen.")
+            if extension == fila_extension:
+                print(f"La extensión '{extension}' ya existen.")
                 return
         
         self.lista_extensiones.append([nombre, extension])
@@ -216,7 +223,7 @@ class OrdenarElementos(ft.UserControl):
                 self.cTitle,
                 ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END),
                 self.button_row,
-                self.lista_column,
+                ft.Container(self.lista_column, height=500),
                 self.button_send
             ],
             alignment=ft.MainAxisAlignment.CENTER

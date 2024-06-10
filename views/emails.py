@@ -3,6 +3,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from logic.emailsender import send_email
+from server.get_email import Get_email
 
 class Email(ft.UserControl):
     def __init__(self, darkMode: bool = True):
@@ -14,13 +15,17 @@ class Email(ft.UserControl):
         self.subject = ft.TextField(label="Asunto", hint_text="Ingrese el asunto")
 
         self.submit_button = ft.ElevatedButton("Enviar", icon=ft.icons.SEND_ROUNDED, on_click=self.send_email)
-        self.destinatarios = [["luisalejandromedinab@gmail.com", False, "Test", "Luis", True],
-                              ["jesusdavidgd200425@gmail.com", True, "Test", "Jesus", True],
-                              ["Correo 2", True, "Personal", "Camilo", True],
-                              ["Correo 3", False, "Familia", "Andres", True], ["Correo 4", True, "Amigos", "Jon", True],
-                              ["Correo 5", False, "Trabajo", "Sara", True], ["Correo 6", True, "Personal", "Luisa", True]]
+        
+        get_email = Get_email()
+        
+        self.filtered_emails = get_email.get_emails()
+        
+        
+        self.destinatarios = []
         
         self.filtros = ["Todos"]
+        
+        self.create_destinatarios()
         
         self.createFilter()
         
@@ -59,6 +64,15 @@ class Email(ft.UserControl):
             alignment=ft.MainAxisAlignment.START,
             scroll=ft.ScrollMode.ALWAYS  # Asegurarse de que el scroll esté habilitado
         )
+        
+    def create_destinatarios(self):
+        for email in self.filtered_emails:
+            print(email)
+            correo = email["Email"]
+            estado = email["Enviar"]
+            tipo = email["Tipo"]
+            nombre = email["Nombre"]
+            self.destinatarios.append([correo, estado, tipo, nombre, True])
     
     def createFilter(self):
         #vamos a llenar el arreglo de filtros con los tipos de correos 
@@ -153,7 +167,7 @@ class Email(ft.UserControl):
             controls=[
                 self.form,
                 self.filtrosColumn,
-                ft.Container(self.destinatarios_column, height=200)  # Añadir un contenedor con altura fija para el scroll
+                ft.Container(self.destinatarios_column, height=400)  # Añadir un contenedor con altura fija para el scroll
             ],
             spacing=20,
             alignment=ft.MainAxisAlignment.CENTER

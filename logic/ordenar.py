@@ -6,6 +6,7 @@ class Ordenamiento:
     def __init__(self, lista_Extenciones, direccion):
         self.lista_Extenciones = lista_Extenciones
         self.direccion = direccion
+        self.carpetas_creadas = []  
         
     def ordenar(self):
         print(self.lista_Extenciones)
@@ -13,7 +14,11 @@ class Ordenamiento:
         print(os.getcwd())
         #Creamos las carpetas
         for nombre, extencion in self.lista_Extenciones:
-            nombre_carpeta = crearDirectorio(nombre)
+            if nombre not in self.carpetas_creadas:
+                nombre_carpeta = crearDirectorio(nombre)
+                self.carpetas_creadas.append(nombre_carpeta)
+            elif nombre in self.carpetas_creadas:
+                nombre_carpeta = nombre
             #movemos los archivos a las carpetas
             print(nombre_carpeta)
             directorio_objetivo = os.path.join(self.direccion, nombre_carpeta)
