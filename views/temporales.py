@@ -2,6 +2,7 @@ import flet as ft
 import os
 import shutil
 import tempfile
+import pathlib
 
 class EliminarArchivosTemporales(ft.UserControl):
     def __init__(self, page, darkmode: bool = True):
@@ -78,7 +79,13 @@ class EliminarArchivosTemporales(ft.UserControl):
         self.theme_button.text = "Light" if not self.darkmode else "Dark"
 
     def eliminar_archivos_temporales(self, e):
-        temp_dirs = [tempfile.gettempdir(), os.path.join(os.environ['SystemRoot'], 'Temp')]
+        temp_dirs = [
+            tempfile.gettempdir(), 
+            os.path.join(os.environ['SystemRoot'], 'Temp'),
+            os.path.expandvars('%temp%'),
+            os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Microsoft', 'Windows', 'INetCache'),
+            os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Microsoft', 'Windows', 'Explorer')
+        ]
         archivos_eliminados = []
 
         for temp_dir in temp_dirs:
