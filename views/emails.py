@@ -11,7 +11,7 @@ class Email(ft.UserControl):
 
         self.email = ft.TextField(label="Correo Electrónico", hint_text="Ingrese su correo electrónico")
         self.password = ft.TextField(label="Contraseña", hint_text="Ingrese su contraseña", password=True)
-        self.message = ft.TextField(label="Mensaje", hint_text="Ingrese su mensaje")
+        self.message = ft.TextField(label="Mensaje", hint_text="Ingrese su mensaje", multiline=True, min_lines=3 )
         self.subject = ft.TextField(label="Asunto", hint_text="Ingrese el asunto")
 
         self.submit_button = ft.ElevatedButton("Enviar", icon=ft.icons.SEND_ROUNDED, on_click=self.send_email)
@@ -170,7 +170,8 @@ class Email(ft.UserControl):
                 ft.Container(self.destinatarios_column, height=400)  # Añadir un contenedor con altura fija para el scroll
             ],
             spacing=20,
-            alignment=ft.MainAxisAlignment.CENTER
+            alignment=ft.MainAxisAlignment.CENTER,
+            scroll=ft.ScrollMode.ALWAYS  # Asegurarse de que el scroll esté habilitado
         )
 
 

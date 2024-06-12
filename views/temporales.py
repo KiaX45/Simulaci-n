@@ -134,7 +134,8 @@ class EliminarArchivosTemporales(ft.UserControl):
                 ft.Row([self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER),
                 self.result_container
             ],
-            alignment=ft.MainAxisAlignment.CENTER
+            alignment=ft.MainAxisAlignment.CENTER,
+            scroll=ft.ScrollMode.ALWAYS  # Asegurarse de que el scroll esté habilitado
         )
 
 def main(page: ft.Page):

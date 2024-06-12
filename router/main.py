@@ -114,7 +114,7 @@ def main(page: ft.Page):
             [
                 rail,
                 ft.VerticalDivider(width=1),
-                ft.Column([email.build()], alignment=ft.MainAxisAlignment.START, expand=True),
+                ft.Column([ft.Container(email.build(), height=800)], alignment=ft.MainAxisAlignment.START, expand=True),
             ],
             expand=True
         )
@@ -150,7 +150,7 @@ def main(page: ft.Page):
             [
                 rail,
                 ft.VerticalDivider(width=1),
-                ft.Column([eliminarArchivosTemporales.build()], alignment=ft.MainAxisAlignment.START, expand=True),
+                ft.Column([ft.Container(eliminarArchivosTemporales.build(), height=800)], alignment=ft.MainAxisAlignment.START, expand=True),
             ],
             expand=True
         )
