@@ -30,7 +30,7 @@ class EliminarArchivosTemporales(ft.UserControl):
         )
 
         self.cDescription_text = ft.Text(
-            "BIENVENIDO",
+            "               Nuestro asistente digital elimina automáticamente archivos temporales y datos innecesarios, \n manteniendo tu sistema limpio y eficiente para que puedas concentrarte en lo que realmente importa",
             size=16,
             font_family="georgia",
             color="#b89789",
