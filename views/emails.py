@@ -1,4 +1,4 @@
-#emails
+# emails
 import flet as ft
 import sys
 import os
@@ -9,7 +9,7 @@ from server.get_email import Get_email
 
 
 class Email(ft.UserControl):
-    def __init__(self,page: ft.page, darkmode: bool = True):
+    def __init__(self, page: ft.page, darkmode: bool = True):
         super().__init__()
 
         self.page = page
@@ -32,6 +32,8 @@ class Email(ft.UserControl):
             label="Mensaje",
             hint_text="Ingrese su mensaje",
             width=700,
+            multiline=True,
+            min_lines=3,
             border_color="#99B898" if self.darkmode else "#007ba7",
         )
         self.subject = ft.TextField(
@@ -121,7 +123,8 @@ class Email(ft.UserControl):
                     scale=1.1,
                 ),
             ],
-            alignment=ft.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.START,
+            
         )
 
         get_email = Get_email()
@@ -139,17 +142,19 @@ class Email(ft.UserControl):
         # Crear una lista de DropdownItem a partir del arreglo
         items = [ft.dropdown.Option(opcion) for opcion in self.filtros]
 
-        self.filtrosColumn = ft.Column(
+        self.filtrosColumn = ft.Container(
+            ft.Row(
             controls=[
                 ft.Dropdown(
                     hint_text="Filtrar por tipo",
                     label="Filtros",
                     options=items,
-                    width=100,
+                    width=200,
                     on_change=self.filtrar,
                 )
             ],
             alignment=ft.MainAxisAlignment.CENTER,
+            )
         )
 
         # Creamos un atributo fila para contener todos los inputs necesarios
@@ -171,7 +176,8 @@ class Email(ft.UserControl):
             alignment=ft.MainAxisAlignment.CENTER,
         )
 
-        self.form = ft.Column(
+        self.form = ft.Container(
+            ft.Column(
             [
                 ft.Text("Enviar Correo Electrónico"),
                 self.email,
@@ -181,6 +187,8 @@ class Email(ft.UserControl):
                 self.submit_button,
             ],
             alignment=ft.MainAxisAlignment.CENTER,
+            ),
+            margin=ft.margin.only(left=300),
         )
 
         # Creamos un atributo que contendrá los destinatarios
@@ -329,7 +337,9 @@ class Email(ft.UserControl):
         for correo, estado, tipo, nombre, show in self.destinatarios:
             if estado == True and show == True:
                 new_message = self.message.value.replace("{nombre}", nombre)
+                new_message = new_message.replace("{correo}", correo)
                 new_subject = self.subject.value.replace("{nombre}", nombre)
+                new_subject = new_subject.replace("{correo}", correo)
                 response = send_email(
                     self.email.value,
                     correo,
@@ -359,7 +369,24 @@ class Email(ft.UserControl):
             ],
             spacing=20,
             alignment=ft.MainAxisAlignment.CENTER,
+            scroll=ft.ScrollMode.ALWAYS  # Asegurarse de que el scroll esté habilitado
         )
+    
+    def update_email(self):
+        get_email = Get_email()
+        self.filtered_emails = get_email.get_emails()
+        self.destinatarios = []
+        self.create_destinatarios()
+        
+       
+        self.createFilter()
+        
+        self.borrar_destinatario(e=None)
+        self.add_destinatarios(e=None)
+        self.destinatarios_column.update()
+        
+        self.page.update()
+        print("hola")
 
 
 def main(page: ft.Page):

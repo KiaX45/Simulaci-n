@@ -224,6 +224,22 @@ class Email_creation(ft.UserControl):
         self.page.dialog = correct_dialog
         correct_dialog.open = True
         self.page.update()
+        
+        #creamos una nueva fila con los datos del correo
+        fila = self.crear_fila(self.correo.value, self.nombre.value, self.mostrar, self.tipo.value)
+        self.destinatarios_column.controls.append(fila)
+        self.page.update()
+        #limpiamos los campos
+        self.nombre.value = ""
+        self.correo.value = ""
+        self.tipo.value = ""
+        self.page.update()
+        
+    def actualizar_correos(self):
+        self.destinatarios_column.controls.clear()
+        self.add_destinatarios(None)
+        self.page.update()
+        
 
     ###################################################################################
 

@@ -36,9 +36,9 @@ def main(page: ft.Page):
     appbar = ft.AppBar(
         leading=ft.Icon(ft.icons.MENU),
         leading_width=50,
-        title=ft.Text("Click Solver"),
+        title=ft.Text("Click Solver", size=36, font_family="georgia", color="#5e5e5e"),
         center_title=True,
-        actions=[theme_button]
+        #actions=[theme_button]
     )
     
     ## Creación de instancias de las clases Home y Email
@@ -56,6 +56,7 @@ def main(page: ft.Page):
                 page.go("/")
             case 1:
                 page.go("/tienda")
+                email.update_email()
             case 2:
                 page.go("/extensiones")
             case 3:

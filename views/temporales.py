@@ -4,6 +4,7 @@ import shutil
 import tempfile
 import pathlib
 
+
 class EliminarArchivosTemporales(ft.UserControl):
     def __init__(self, page, darkmode: bool = True):
         super().__init__()
@@ -17,39 +18,60 @@ class EliminarArchivosTemporales(ft.UserControl):
         self.page.bgcolor = "#2A363B" if self.darkmode else "#F4F4F4"
         self.page.vertical_alignment = "center"
         self.page.horizontal_alignment = "center"
-        self.page.theme_mode = ft.ThemeMode.DARK if self.darkmode else ft.ThemeMode.LIGHT
+        self.page.theme_mode = (
+            ft.ThemeMode.DARK if self.darkmode else ft.ThemeMode.LIGHT
+        )
 
         self.cTitle_text = ft.Text(
-            'ELIMINAR ARCHIVOS TEMPORALES',
+            "ELIMINAR ARCHIVOS TEMPORALES",
             size=40,
             font_family="georgia",
-            color="#FECEA8" if self.darkmode else "black"
+            color="#FECEA8" if self.darkmode else "black",
+        )
+
+        self.cDescription_text = ft.Text(
+            "BIENVENIDO",
+            size=16,
+            font_family="georgia",
+            color="#b89789",
         )
 
         self.text_container = ft.Container(
-            self.cTitle_text,
-            alignment=ft.alignment.center
+            self.cTitle_text, alignment=ft.alignment.center
         )
 
         self.cTitle = ft.Container(
             ft.Row(
                 [
-                    self.text_container,  
+                    self.text_container,
                 ],
-                alignment=ft.MainAxisAlignment.CENTER
+                alignment=ft.MainAxisAlignment.CENTER,
             ),
             padding=ft.padding.only(1),
             margin=ft.margin.only(1, 30),
         )
 
-        self.iconButton = ft.icons.DARK_MODE if not self.darkmode else ft.icons.LIGHT_MODE
-        self.theme_button = ft.ElevatedButton("Dark", self.iconButton, on_click=self.changeTheme)
+        self.iconButton = (
+            ft.icons.DARK_MODE if not self.darkmode else ft.icons.LIGHT_MODE
+        )
+        self.theme_button = ft.ElevatedButton(
+            "Dark", self.iconButton, on_click=self.changeTheme
+        )
 
         self.button_delete_temp = ft.ElevatedButton(
             "Eliminar Archivos Temporales",
             icon=ft.icons.DELETE,
             on_click=self.eliminar_archivos_temporales,
-            style=ft.ButtonStyle(overlay_color="#99B898", bgcolor="none", shape=ft.RoundedRectangleBorder(radius=12), side=ft.BorderSide(color="red400", width=2), shadow_color="grey600", elevation=5)
+            style=ft.ButtonStyle(
+                overlay_color="#ff580f",
+                bgcolor="none",
+                shape=ft.RoundedRectangleBorder(radius=12),
+                side=ft.BorderSide(color="red400", width=1),
+                shadow_color="grey600",
+                elevation=5,
+            ),
+            width=300,
+            height=45,
         )
 
         self.result_container = ft.Column()
@@ -59,17 +81,24 @@ class EliminarArchivosTemporales(ft.UserControl):
     def build_ui(self):
         self.page.controls.clear()
         self.page.controls.append(self.cTitle)
-        self.page.controls.append(ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END))
-        self.page.controls.append(ft.Row([self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER))
+        self.page.controls.append(
+            ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END)
+        )
+        self.page.controls.append(
+            ft.Row([self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER)
+        )
         self.page.controls.append(self.result_container)
         self.page.update()
 
     def changeTheme(self, e):
         self.darkmode = not self.darkmode
-        self.page.theme_mode = ft.ThemeMode.DARK if self.darkmode else ft.ThemeMode.LIGHT
+        self.page.theme_mode = (
+            ft.ThemeMode.DARK if self.darkmode else ft.ThemeMode.LIGHT
+        )
         self.page.bgcolor = "#2A363B" if self.darkmode else "#F4F4F4"
         self.cTitle_text.color = "#FECEA8" if self.darkmode else "#434b4d"
-        
+        self.cDescription_text.color = color = "#b89789" if self.darkmode else "#434b4d"
+
         self.updateThemeButton()
         self.page.update()
 
@@ -80,11 +109,25 @@ class EliminarArchivosTemporales(ft.UserControl):
 
     def eliminar_archivos_temporales(self, e):
         temp_dirs = [
-            tempfile.gettempdir(), 
-            os.path.join(os.environ['SystemRoot'], 'Temp'),
-            os.path.expandvars('%temp%'),
-            os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Microsoft', 'Windows', 'INetCache'),
-            os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Microsoft', 'Windows', 'Explorer')
+            tempfile.gettempdir(),
+            os.path.join(os.environ["SystemRoot"], "Temp"),
+            os.path.expandvars("%temp%"),
+            os.path.join(
+                os.environ["USERPROFILE"],
+                "AppData",
+                "Local",
+                "Microsoft",
+                "Windows",
+                "INetCache",
+            ),
+            os.path.join(
+                os.environ["USERPROFILE"],
+                "AppData",
+                "Local",
+                "Microsoft",
+                "Windows",
+                "Explorer",
+            ),
         ]
         archivos_eliminados = []
 
@@ -129,19 +172,30 @@ class EliminarArchivosTemporales(ft.UserControl):
     def build(self):
         return ft.Column(
             controls=[
-                self.cTitle,
+                ft.Row(
+                    controls=[self.cTitle],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                ft.Row(
+                    controls=[ft.Container(self.cDescription_text)],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
                 ft.Row([self.theme_button], alignment=ft.MainAxisAlignment.END),
-                ft.Row([self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER),
-                self.result_container
+                ft.Row(
+                    [self.button_delete_temp], alignment=ft.MainAxisAlignment.CENTER
+                ),
+                self.result_container,
             ],
             alignment=ft.MainAxisAlignment.CENTER,
-            scroll=ft.ScrollMode.ALWAYS  # Asegurarse de que el scroll esté habilitado
+            scroll=ft.ScrollMode.ALWAYS,  # Asegurarse de que el scroll esté habilitado
         )
+
 
 def main(page: ft.Page):
     page.title = "Eliminar Archivos Temporales"
     eliminar_archivos_temp_app = EliminarArchivosTemporales(page)
     page.add(eliminar_archivos_temp_app.build())
+
 
 if __name__ == "__main__":
     ft.app(target=main)
