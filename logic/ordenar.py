@@ -23,13 +23,20 @@ class Ordenamiento:
             print(nombre_carpeta)
             directorio_objetivo = os.path.join(self.direccion, nombre_carpeta)
             archivos_directorio = os.listdir()
+            borrar = True
             for archivo in archivos_directorio:
                 if os.path.isfile(archivo):
                  ruta_archivo_origen = os.path.join(self.direccion, archivo)  
                  nombre_Archivo, extencion_arcivo = os.path.splitext(archivo)
                  if extencion_arcivo == extencion:
+                     borrar = False
                      shutil.move(ruta_archivo_origen, directorio_objetivo)
                      print(f"el archivo {nombre_Archivo} se deberia mover a la carpeta {nombre_carpeta}")
+            if borrar:
+                    os.rmdir(directorio_objetivo)
+                    self.carpetas_creadas.remove(nombre_carpeta)
+                    print(f"Se borro la carpeta {nombre_carpeta}")     
+                 
         
                 
 def crearDirectorio(nombre, intento=1):

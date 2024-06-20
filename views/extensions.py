@@ -312,6 +312,16 @@ class OrdenarElementos(ft.UserControl):
 
         ordenar = Ordenamiento(self.lista_extensiones, self.carpeta_destino)
         ordenar.ordenar()
+        
+        #mostramos un dialog
+        dialog = ft.AlertDialog(
+                title=ft.Text("Exito"),
+                content=ft.Text("Los archivos han sido ordenados exitosamente."),
+            )
+        self.page.dialog = dialog
+        dialog.open = True
+        self.page.update()
+        print("Archivos ordenados exitosamente.")
 
     def build(self) -> ft.Column:
         return ft.Column(
