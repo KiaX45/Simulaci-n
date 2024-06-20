@@ -13,7 +13,7 @@ class Csv_convert:
         name = self.file_name.split(".")[0]
         data.to_excel(f"{name}.xlsx", index=False)
         print("Archivo convertido a Excel") 
-        
+        0
         
 if __name__ == "__main__":
     file_path = r'E:\testOrdenamiento\Excel\CSV.csv'  # Sustituye con la ruta real de tu archivo

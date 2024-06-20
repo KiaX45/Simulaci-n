@@ -348,6 +348,15 @@ class Email(ft.UserControl):
                     new_subject,
                 ).send()
                 print(response)
+                
+        dialog = ft.AlertDialog(
+                title=ft.Text("Exito"),
+                content=ft.Text("Todos los correos han sido enviados exitosamente"),
+            )
+        self.page.dialog = dialog
+        dialog.open = True
+        self.page.update()
+        
 
         print(self.message.value)
         print(self.subject.value)
